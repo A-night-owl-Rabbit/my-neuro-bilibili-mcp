@@ -8,16 +8,16 @@
 |------|------|
 | **形态变更** | 旧版为 `server-tools/bilibili_mcp.js` 单文件工具；现改为标准 **Plugin**（`index.js` + `metadata.json` + 多模块），放入 `plugins/community/` 即可加载。 |
 | **显示名称** | 插件在面板中显示为 **「B站也逃脱不了肥牛大人的魔爪」**（`metadata.json` 的 `displayName`）。 |
-| **依赖** | 本仓库含 **`package-lock.json`**。因 GitHub 推送保护会拦截 `node_modules` 内第三方测试文件中的假密钥，**仓库不附带 node_modules**；克隆后在插件目录执行 **`npm ci`** 即可还原与作者一致的依赖树（推荐）。Python 侧见下文。 |
+| **依赖** | 本仓库含 **`package-lock.json`**。因 GitHub 对「直接提交的 `node_modules` 目录」会触发推送保护，故提供 **`node_modules.zip`**：下载/克隆后在本目录**解压**得到 `node_modules` 文件夹即可，**无需 npm**（开箱即用，解压工具用系统自带或 7-Zip 均可）。若推送被拒或你希望自行安装，仍可在插件目录执行 **`npm ci`**。Python 侧见下文。 |
 | **隐私与密钥** | **不会**收录任何用户的 `bili_config.json`、API Key、本地 Python 路径等。请复制 `bili_config.example.json` 为 `bili_config.json` 并自行填写；在 my-neuro 插件设置中填写总结用 API Key 与 `python_executable`。 |
 | **总结提示词** | 作者私有长版 AI system 提示词**未放入仓库**。默认使用 `summary_system_prompt.default.txt`；你可复制 `summary_system_prompt.example.txt` 的说明，自行创建 `summary_system_prompt.txt` 覆盖（该文件已列入 `.gitignore`）。 |
 
 ## 快速开始（my-neuro live-2d）
 
 1. 将本仓库**整个文件夹**复制到：`live-2d/plugins/community/bilibili-tools`（文件夹名可与 `metadata.json` 中 `name` 一致）。
-2. 在**该插件目录**下安装 Node 依赖（与 lockfile 一致）：  
-   `npm ci`  
-   （若无 lockfile 或需放宽版本，可用 `npm install`。）
+2. **Node 依赖（二选一）**  
+   - **免安装（推荐小白）**：将本目录下的 **`node_modules.zip` 解压到当前文件夹**，解压后应出现与 `index.js` 同级的 **`node_modules`** 目录。  
+   - **命令行安装**：已安装 Node.js 时，在本目录执行 `npm ci`（或 `npm install`）。
 3. **Python（字幕 / Whisper）**  
    - 字幕（与 BiliRead 同款）：在所用 Python 环境中执行  
      `pip install -r requirements.txt`  
