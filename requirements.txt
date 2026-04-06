@@ -1,0 +1,2 @@
+# 字幕获取（与 AstrBot BiliRead 相同：bilibili-api-python）
+bilibili-api-python>=16.3.0

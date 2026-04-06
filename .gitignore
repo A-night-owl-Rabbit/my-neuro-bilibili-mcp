@@ -1,2 +1,17 @@
+# 本地凭证与自定义提示词（勿提交）
+bili_config.json
+summary_system_prompt.txt
+
+# 运行时生成
+temp_audio/bili_cookies.txt
+temp_subtitle/bili_cookies.txt
+*.pyc
+__pycache__/
+.python-version
+
+# 依赖由 package-lock.json 锁定，克隆后执行 npm ci（node_modules 含第三方测试假密钥，无法通过 GitHub 推送保护）
 node_modules/
-*.log
+
+# 本地推送脚本/令牌（切勿提交）
+.pat
+.git_push_token

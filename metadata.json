@@ -1,0 +1,8 @@
+{
+  "name": "bilibili-tools",
+  "displayName": "B站也逃脱不了肥牛大人的魔爪",
+  "version": "3.7.0",
+  "author": "爱熬夜的人形兔",
+  "description": "提供B站视频搜索、排行榜、信息获取、内容转录与智能总结、评论与弹幕发送、点赞投币收藏等功能",
+  "main": "index.js"
+}

@@ -1,0 +1,5 @@
+# 可选：无 CC 字幕时 Whisper 语音转录（体积较大，按需安装）
+yt-dlp>=2024.1.0
+openai-whisper
+torch
+ffmpeg-python

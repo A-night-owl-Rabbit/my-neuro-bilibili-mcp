@@ -1,0 +1,114 @@
+{
+  "enabled": {
+    "title": "启用插件",
+    "description": "是否启用B站工具集",
+    "type": "bool",
+    "default": true,
+    "value": true
+  },
+  "python_executable": {
+    "title": "Python 解释器路径",
+    "description": "须安装 requirements.txt（含 bilibili-api-python）以获取字幕，并用于 Whisper 语音转录；留空则字幕与转录均不可用",
+    "type": "string",
+    "default": "",
+    "value": ""
+  },
+  "whisper_model": {
+    "title": "Whisper 模型大小",
+    "description": "语音转录使用的 Whisper 模型，可选: tiny, base, small, medium, large",
+    "type": "string",
+    "default": "medium",
+    "value": "medium"
+  },
+  "search_limit": {
+    "title": "搜索默认数量",
+    "description": "搜索视频时默认返回的结果数量",
+    "type": "int",
+    "default": 3,
+    "value": 3
+  },
+  "ranking_limit": {
+    "title": "排行榜默认数量",
+    "description": "获取排行榜时默认返回的视频数量",
+    "type": "int",
+    "default": 10,
+    "value": 10
+  },
+  "summary": {
+    "title": "视频总结配置",
+    "description": "用于视频内容 AI 总结的下级智能体配置",
+    "type": "object",
+    "fields": {
+      "use_summary": {
+        "title": "启用 AI 总结",
+        "description": "是否对视频转录/字幕内容使用 AI 进行智能总结",
+        "type": "bool",
+        "default": true,
+        "value": true
+      },
+      "api_url": {
+        "title": "API 地址",
+        "description": "总结智能体的 API 地址",
+        "type": "string",
+        "default": "https://api.siliconflow.cn/v1/chat/completions",
+        "value": "https://api.siliconflow.cn/v1/chat/completions"
+      },
+      "api_key": {
+        "title": "API Key",
+        "description": "总结智能体的 API Key",
+        "type": "string",
+        "default": "",
+        "value": ""
+      },
+      "model": {
+        "title": "模型名称",
+        "description": "总结智能体使用的模型",
+        "type": "string",
+        "default": "deepseek-ai/DeepSeek-V3.2",
+        "value": "deepseek-ai/DeepSeek-V3.2"
+      },
+      "max_tokens": {
+        "title": "最大 Token 数",
+        "description": "AI 总结的最大输出 Token 数",
+        "type": "int",
+        "default": 8000,
+        "value": 8000
+      },
+      "temperature": {
+        "title": "生成温度",
+        "description": "AI 总结的生成温度，越低越精确",
+        "type": "float",
+        "default": 0.5,
+        "value": 0.5
+      }
+    }
+  },
+  "anti_risk": {
+    "title": "反风控配置",
+    "description": "模拟人类行为以降低B站风控拦截概率",
+    "type": "object",
+    "fields": {
+      "simulate_human": {
+        "title": "模拟人类行为",
+        "description": "发送评论/弹幕前是否模拟浏览、观看等人类行为",
+        "type": "bool",
+        "default": true,
+        "value": true
+      },
+      "random_delay_min": {
+        "title": "最小随机延迟(ms)",
+        "description": "随机延迟的最小毫秒数",
+        "type": "int",
+        "default": 1000,
+        "value": 1000
+      },
+      "random_delay_max": {
+        "title": "最大随机延迟(ms)",
+        "description": "随机延迟的最大毫秒数",
+        "type": "int",
+        "default": 3000,
+        "value": 3000
+      }
+    }
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "name": "bilibili-tools-plugin",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Bilibili 工具插件本地依赖（仅本目录）",
+  "dependencies": {
+    "axios": "^1.9.0",
+    "bilibili-api-ts": "^11.11.2",
+    "md5": "^2.3.0",
+    "qrcode": "^1.5.4"
+  }
+}

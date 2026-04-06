@@ -1,0 +1,2 @@
+将本文件复制为同目录下的 summary_system_prompt.txt 即可自定义视频总结的 system 提示词（勿将含隐私或密钥的内容提交到公开仓库）。
+本仓库已提供 summary_system_prompt.default.txt 作为默认总结风格；不创建 txt 时也会使用代码内置的极简兜底提示。
