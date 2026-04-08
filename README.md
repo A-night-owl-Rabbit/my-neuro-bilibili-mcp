@@ -12,21 +12,85 @@
 | **隐私与密钥** | **不会**收录任何用户的 `bili_config.json`、API Key、本地 Python 路径等。请复制 `bili_config.example.json` 为 `bili_config.json` 并自行填写；在 my-neuro 插件设置中填写总结用 API Key 与 `python_executable`。 |
 | **总结提示词** | 作者私有长版 AI system 提示词**未放入仓库**。默认使用 `summary_system_prompt.default.txt`；你可复制 `summary_system_prompt.example.txt` 的说明，自行创建 `summary_system_prompt.txt` 覆盖（该文件已列入 `.gitignore`）。 |
 
+## 使用前必读：避免「综合信息 / 字幕 / 转录」报错
+
+若工具返回 **「未配置 python_executable 或解释器路径无效」**、**「未在指定路径找到 Python 解释器」**，或提示 **pip install -r requirements.txt**，说明 **插件里填的 Python 路径不对**，或 **没有在同一个 Python 里安装依赖**。下面按顺序做一次即可排除绝大多数问题。
+
+### 1. `python_executable` 填什么？
+
+- 必须填 **`python.exe` 的完整绝对路径**（一个真实存在的文件），例如：
+  - `C:\Users\你的用户名\AppData\Local\Programs\Python\Python312\python.exe`
+  - `K:\ai\envs\my-neuro\python.exe`（虚拟环境）
+- **不要**填：`python`、`py`、只填到目录、或从教程/别人机器上复制的路径（例如 `C:\Users\20142\...` 在你电脑上很可能不存在）。
+- **不要**填 **Windows「应用执行别名」** 或商店占位路径；若路径里有 `WindowsApps` 且文件并不存在，请改用 [python.org](https://www.python.org/downloads/) 安装的 Python 或 `py launcher` 查到的路径（见下文）。
+
+在资源管理器地址栏粘贴路径（含 `python.exe`），能打开并看到文件，才算路径有效。
+
+### 2. Windows：如何查到本机正确的 `python.exe`？
+
+在 **命令提示符（cmd）** 或 **PowerShell** 中执行（任选其一）：
+
+```bat
+py -0p
+```
+
+会列出已注册的 Python 及路径，选你要用的那一行里的 **`...\python.exe`**，完整复制到插件配置。
+
+若没有 `py`，可试：
+
+```bat
+where python
+```
+
+以输出为准；若指向 `WindowsApps` 且运行异常，请安装官方 Python 后再查。
+
+### 3. 安装依赖（必须与 `python_executable` 是同一个解释器）
+
+1. 打开终端，`cd` 到 **本插件目录**（与 `requirements.txt`、`index.js` 同级）。
+2. 用 **即将填入插件的同一个** `python.exe` 安装依赖（推荐写法）：
+
+```bat
+"C:\路径\到\python.exe" -m pip install -r requirements.txt
+```
+
+**为什么要加 `-m pip`？** 这样包装进当前这个 `python.exe`，不会出现「命令行里 pip 装了一套，插件用的却是另一个 Python」的情况。
+
+- **字幕**：依赖 `requirements.txt`（含 `bilibili-api-python`）。
+- **无字幕时 Whisper 转录**：还需额外安装 Whisper 相关包（见仓库内 `requirements-whisper.txt` 若存在；否则需自行安装 `yt-dlp`、`openai-whisper`、`torch` 等，并安装系统级 **ffmpeg**）。
+
+### 4. Python 版本建议
+
+建议使用 **Python 3.10～3.12** 64 位。过新的大版本（例如预览版或极新稳定版）可能导致部分依赖暂无 wheel，安装失败；若 `pip install` 报错，可换 3.11/3.12 再试。
+
+### 5. 报错与原因速查
+
+| 现象 | 常见原因 |
+|------|----------|
+| 未配置或路径无效 | `python_executable` 为空、路径拼错、从别的电脑抄的路径、文件已被卸载 |
+| 字幕不可用 + 提示 pip install | 路径有效但未执行 `-m pip install -r requirements.txt`，或装到了别的 Python |
+| 转录提示找不到解释器 | 同上；或路径指向了不存在的 `pythoncore-*` 目录（微软商店/安装器残留路径） |
+
+---
+
+## 仓库与形态说明
+
+| 项目 | 说明 |
+|------|------|
+| **形态** | 标准 Plugin：`index.js` + `metadata.json` + 多模块，放入 `live-2d/plugins/community/bilibili-tools`（文件夹名可与 `metadata.json` 的 `name` 一致）。 |
+| **Node 依赖** | 仓库含 `package-lock.json`。若提供 `node_modules.zip`，解压到插件目录即可；否则在本目录执行 `npm ci` 或 `npm install`。 |
+| **隐私** | 勿提交 `bili_config.json`、API Key、个人 `python_executable`。可复制 `bili_config.example.json` 为 `bili_config.json` 并本地填写。 |
+
+---
+
 ## 快速开始（my-neuro live-2d）
 
-1. 将本仓库**整个文件夹**复制到：`live-2d/plugins/community/bilibili-tools`（文件夹名可与 `metadata.json` 中 `name` 一致）。
-2. **Node 依赖（二选一）**  
-   - **免安装（推荐小白）**：将本目录下的 **`node_modules.zip` 解压到当前文件夹**，解压后应出现与 `index.js` 同级的 **`node_modules`** 目录。  
-   - **命令行安装**：已安装 Node.js 时，在本目录执行 `npm ci`（或 `npm install`）。
-3. **Python（字幕 / Whisper）**  
-   - 字幕（与 BiliRead 同款）：在所用 Python 环境中执行  
-     `pip install -r requirements.txt`  
-   - 需要无字幕时的 **Whisper 转录**：额外执行  
-     `pip install -r requirements-whisper.txt`  
-     并安装系统级 **ffmpeg**（Whisper / yt-dlp 需要）。
-4. 复制 `bili_config.example.json` → `bili_config.json`，填入 B 站登录字段；或使用工具 **`login_bilibili_by_qrcode`** 扫码写入。
-5. 在 my-neuro **插件配置**中填写：`python_executable`、总结用 **`summary.api_key`**（及可选 API 地址与模型）。
+1. 将本文件夹放到：`live-2d/plugins/community/bilibili-tools`。
+2. 处理 Node 依赖：解压 `node_modules.zip` **或** 在本目录执行 `npm ci`。
+3. **配置 Python**：按上文填写 `python_executable` 并执行 `pip install -r requirements.txt`（同一解释器）。
+4. 复制 `bili_config.example.json` → `bili_config.json`，填入 B 站登录信息；或使用工具 **`login_bilibili_by_qrcode`** 扫码写入。
+5. 在 my-neuro **插件配置** 中填写：`python_executable`、总结用 **`summary.api_key`**（及可选 API 地址与模型）。
 
+---
 ## 工具列表
 
 | 工具名 | 功能 |
